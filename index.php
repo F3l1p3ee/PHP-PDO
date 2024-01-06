@@ -5,24 +5,26 @@ $usuario = "root";
 $senha = "";
 
 try {
-    // Instanciando a conexão ao PDO
+// Instanciando a conexão ao PDO
     $conexao = new PDO($dsn, $usuario, $senha);
     $query = "
-    create table if not exists tb_usuarios(
-        id int not null primary key auto_increment,
-        nome varchar(50) not null,
-        email varchar (100) not null,
-        senha varchar(100) not null
-    )
+    select * from tb_usuarios
     ";
 
-    $conexao->exec($query);
+// Obtendo um PDOStatement com o script que foi enviado do PHP para o PDO
+    $stmt = $conexao->query($query);
 
-    $query = "
-    delete from tb_usuarios
-    ";
+// Executando o comando fetchAll() para ter o retorno da query e armazená-la numa variável para poder ser acessada
+    $retornos = $stmt->fetch(PDO::FETCH_ASSOC); // Com PDO::FETCH_ASSOC podemos ter apenas o retorno do índices associativos (nomes das colunas da tabela)
 
-    $conexao->exec($query);
+    print_r($retornos);
+    // echo "<pre>";
+    // print_r($retornos);
+    // echo "</pre>";
+
+    // foreach($retornos as $retorno){
+    //     echo "Seja muito bem-vindo " . $retorno["nome"] . "<hr>";
+    // }
 
 } catch(PDOException $e) {
     echo "Erro: " . $e->getCode() . " Mensagem: " . $e->getMessage();
